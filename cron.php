@@ -24,7 +24,7 @@ if (is_dir($backupfolderpath)) {
 
     //copy file to audio folder and overwrite chat_sound if required
 
-    copy($backupfolderpath . "/" . $newfile, $audiopath . "/chat_sound.jpg");
+    copy($backupfolderpath . "/" . $newfile, $audiopath . "/chat_sound.mp3");
 } else {
     echo "backup folder missing. Please Create this folder";
 }
