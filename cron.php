@@ -18,6 +18,7 @@ if (is_dir($filesfolderpath)) {
 
         //select file for deletion        
         $filetodelete = "chat_sound.mp3";
+
         if (is_file($filesfolderpath . "/" . $filetodelete)) {
             //delete the file if it exists
             unlink($filesfolderpath . "/" . $filetodelete);
@@ -30,9 +31,9 @@ if (is_dir($filesfolderpath)) {
             $filenames[1] = "audio/chat_sound.mp3";
             $filelistnew = array_shift($filenames);
 
-            //write the new file list to the currentfilelist file
+            //write the new file list to the currentfilelist file 
             $fp = fopen('currentfilelist.txt', 'w');
-            fwrite($fp, json_encode($filenames));
+            fwrite($fp, json_encode($filenames, JSON_PRETTY_PRINT));
             fclose($fp);
         }
     } else {
