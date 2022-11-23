@@ -1,46 +1,32 @@
 <?php
 //Get current folder path
 $path = dirname(__FILE__);
-//Store files in a subdirectory called audio
-$filesfolderpath =  $path . "/audio";
+//Store files in a subdirectory called backup and audio
+$backupfolderpath =  $path . "/backup";
+$audiopath =  $path . "/audio";
 
 // check if audio subfolder exists before continuing
-if (is_dir($filesfolderpath)) {
+if (is_dir($backupfolderpath)) {
 
     //file list stored in the file called currentfilelist
 
-    // read and display current file list
-    if (is_file($path . "/currentfilelist.txt")) {
-        $currentfilelist = file_get_contents("currentfilelist.txt");
-        $filenames = json_decode($currentfilelist);
-        echo json_encode($filenames);
+    // read and display current file list in backup folder
+    $filenames = array_values(array_filter(scandir($backupfolderpath), function ($file) use ($backupfolderpath) {
+        return !is_dir($backupfolderpath . '/' . $file);
+    }));
+    echo json_encode($filenames, JSON_PRETTY_PRINT);
 
 
-        //select file for deletion        
-        $filetodelete = "chat_sound.mp3";
+    //selet random file from list and display
+    $randomfile = array_rand($filenames, 1);
+    $newfile = $filenames[$randomfile];
+    echo "<br/> Current file : " . $newfile;
 
-        if (is_file($filesfolderpath . "/" . $filetodelete)) {
-            //delete the file if it exists
-            unlink($filesfolderpath . "/" . $filetodelete);
+    //copy file to audio folder and overwrite chat_sound if required
 
-            //rename next file if it exists
-            if (is_file($path . "/" . $filenames[1])) {
-                rename($path . "/" . $filenames[1], $filesfolderpath . "/" . "chat_sound.mp3");
-            }
-            //update current file list variable
-            $filenames[1] = "audio/chat_sound.mp3";
-            $filelistnew = array_shift($filenames);
-
-            //write the new file list to the currentfilelist file 
-            $fp = fopen('currentfilelist.txt', 'w');
-            fwrite($fp, json_encode($filenames, JSON_PRETTY_PRINT));
-            fclose($fp);
-        }
-    } else {
-        echo "Missing currentfilelist.txt . Please Create this File.";
-    }
+    copy($backupfolderpath . "/" . $newfile, $audiopath . "/chat_sound.jpg");
 } else {
-    echo "Audio Subfolder missing. Please Create this folder";
+    echo "backup folder missing. Please Create this folder";
 }
 
 // run cron job every day :
