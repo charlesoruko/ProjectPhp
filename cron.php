@@ -5,10 +5,10 @@ $path = dirname(__FILE__);
 $backupfolderpath =  $path . "/backup";
 $audiopath =  $path . "/audio";
 
-// check if audio subfolder exists before continuing
+// check if backup subfolder exists before continuing
 if (is_dir($backupfolderpath)) {
 
-    //file list stored in the file called currentfilelist
+
 
     // read and display current file list in backup folder
     $filenames = array_values(array_filter(scandir($backupfolderpath), function ($file) use ($backupfolderpath) {
